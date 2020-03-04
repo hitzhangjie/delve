@@ -107,6 +107,52 @@ Well, when calling a function, pushing the arguments, pushing the return address
 
 ## 2.2 Architecture of Delve
 
+### 2.2.1 Architecture of a Symbolic Debugger
+
+|                |                   |
+|:--------------:|:------------------|
+| UI Layer       | the debugging user interface, like: <br>- command line interface<br>- graphical user interface like GoLand or VSCode Go.
+| Symbolic Layer | knows about:<br> - line numbers, .debug_line<br>- types, .debug_types<br>- variable names, .debug_info, etc.
+| Target Layer   | controls target process, doesn't know anything about your source code, like<br>- set breakpoint<br>- execute next statement<br>- step into a function<br>- step out a function<br>- etc.
+
+### 2.2.2 Features of the Target Layer
+
+- Attach/detach from target process
+- Enumerate threads in the target process
+- Can start/stop individual threads (or the whole process) 
+    > CPU instruction patching, like X86 int3 generates 0xCC
+- Receives "debug events" (thread creation/death and most importantly thread stop no a breakpoint)
+- Can read/write the memory of the target process
+    > like Linux ptrace peek/poke data in memory
+- Can read/write the CPU registers of a stopped thead
+    - actually this is the CPU registers saved in the thread descriptor of the OS scheduler
+    > like Linux ptrace peek/poke data in registers.<br/> <br/>
+    well, when thread is switched off the CPU, its hardware context must be saved somewhere. when the thread becomes runnable and scheduled, its hardware context saved before will be resumed. So where does this hardware context saved? please check the knowledge about GDT, it holds the thread descriptor entries and code segment priviledge control relevant entries.
+
+For now, we have 3 implementions of the target layer:
+- pkg/proc/native: controls target process using OS API calls, supports:
+    - Windows  
+    `WaitForDebugEvent`, `ContinueDebugEvent`, `SuspendThread`...
+    - Linux
+    `ptrace`, `waitpid`, `tgkill`...
+    - macOS
+    `notification/exception ports`, `ptrace`, `mach_vm_region`...
+    > /pkg/proc/native, it's the default backend on Windows and Linux
+- pkg/proc/core: reads linux_amd64 core files
+- pkg/proc/gdbserial: used to connect to:
+    - debugserver on macOS (default setup on macOS)
+    - lldb-server
+    - Mozillar RR (a time travel debugger backend, only works on linux/amd64)
+    > the names comes from the protocol it speaks, the Gdb Remote Serial Protocol
+ 
+About debuggserver
+- pkg/proc/gdbserial connected to debugserver is the default target layer for macOS
+- two reasons:
+    - the native backend uses undocumented API and never worked properly
+    - the kernel API used by the native backend are restricted and require a signed executable
+        - distributing a signed executable as an open source project is problematic
+        - users often got the self-signing process wrong
+
 ## 2.3 Implemention of some delve features
 
 # 3 Reference
