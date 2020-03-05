@@ -6,3 +6,4 @@ cmd/dlv/dlv
 .vagrant
 **/*.swp
 localtests
+.idea/**
