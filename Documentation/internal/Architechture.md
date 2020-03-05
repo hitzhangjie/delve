@@ -292,6 +292,38 @@ To create a stack trace:
 
 ### 2.2.4 Actual Architecture of Delve
 
+We Mentioned before, delve's architecture includes:
+- UI Layer
+- Symbolic Layer
+- Target Layer
+
+Well, this is a lie.
+
+#### 2.2.4.1 Actual Architecture
+
+If we want delve to be embeded into other programs easier, service oriented APIs should be provided.
+
+![delve actual architecture](assets/delve_architecture.jpeg)
+
+This architecture and design makes embedding delve into other programs easier, so you can integrate delve with GoLand, VSCode, Atom, Vim, etc.
+
+#### 2.2.4.2 User Interfaces
+
+- Built-in command line prompt Plugins
+    - Atom plugin, https://github.com/lloiser/go-debug 
+    - Emacs plugin, https://github.com/benma/go-dlv.el/ 
+    - Vim-go, https://github.com/fatih/vim-go
+    - VS Code Go, https://github.com/Microsoft/vscode-go
+– IDE
+    - JetBrains GoLand IDE, https://www.jetbrains.com/go
+    - LiteIDE, https://github.com/visualfc/liteide
+- Standalone GUI debuggers
+    - Gdlv, https://github.com/aarzilli/gdlv
+    
+Delve's actual architecture and associated core packages is as following:
+
+![delve_actual_architecture](assets/delve_architecture_core.jpeg)    
+
 ## 2.3 Implemention of some delve features
 
 # 3 Reference
