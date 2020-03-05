@@ -2,11 +2,9 @@
 Delve is a symbolic debugger for the Go Programming Language, used by Goland IDE, VSCode Go, vim-go, etc.
 This document will give a general overview of delve's architecture, and explain why other debuggers have difficulties with Go programs.
 
-# 2 Contents
+# 2 Assembly Basics
 
-## 2.1 Assembly Basics
-
-### 2.1.1 CPU
+## 2.1 CPU
 
 - Computers have CPUs
 - CPUs have registers, in particular:
@@ -18,7 +16,7 @@ This document will give a general overview of delve's architecture, and explain 
     MOVQ DX, 0x58(SP)
     ```
   
-### 2.1.2 Call Stack
+## 2.2 Call Stack
 
 Normally, each function call has a isolated call stack frame, where stores the arguments, local variables and  return address of a function call.
 
@@ -84,7 +82,7 @@ Finally main.f pushes its local variables on the stack:
 
 Well, when calling a function, pushing the arguments, pushing the return address, saving the Base Pointer, assigning the value of Base Pointer to Stack Pointer... These actions are defined by ABI (Application Binary Interface).
 
-### 2.1.3 Threads and Goroutines
+## 2.3 Threads and Goroutines
 
 - M:N threading / green threads
     - M goroutines are scheduled cooperatively on N threads
@@ -105,9 +103,9 @@ Well, when calling a function, pushing the arguments, pushing the return address
     - debuggers normally assume stacks don't move
         > as mentioned above, goroutine stack can grow and shrink, it maybe moved here and there in memory, so the register SP must be changed to address the right position. while debuggers normally assume stacks don't move, so they may behave totally wrongly.
 
-## 2.2 Architecture of Delve
+# 3 Architecture of Delve
 
-### 2.2.1 Architecture of a Symbolic Debugger
+## 3.1 Architecture of a Symbolic Debugger
 
 |                |                   |
 |:--------------:|:------------------|
@@ -115,7 +113,7 @@ Well, when calling a function, pushing the arguments, pushing the return address
 | Symbolic Layer | knows about:<br> - line numbers, .debug_line<br>- types, .debug_types<br>- variable names, .debug_info, etc.
 | Target Layer   | controls target process, doesn't know anything about your source code, like<br>- set breakpoint<br>- execute next statement<br>- step into a function<br>- step out a function<br>- etc.
 
-### 2.2.2 Features of the Target Layer
+## 3.2 Features of the Target Layer
 
 - Attach/detach from target process
 - Enumerate threads in the target process
@@ -153,7 +151,7 @@ About debuggserver
         - distributing a signed executable as an open source project is problematic
         - users often got the self-signing process wrong
 
-### 2.2.3 Symbolic Layer
+## 3.3 Symbolic Layer
 
 ```
 
@@ -181,7 +179,7 @@ The Symbolic Layer:
 > - compiler/linker, is the producer of DWARF info
 > - Symbolic Layer, is the consumer of DWARF info
 
-#### 2.2.3.1 DWARF Sections
+### 3.3.1 DWARF Sections
 
 DWARF defines many sections:
 
@@ -205,7 +203,7 @@ The important ones:
 - debug_frame: stack unwinding information
 - debug_info: describes all functions, types and variables in the program
 
-#### 2.2.3.2 debug_info example
+### 3.3.2 debug_info example
 
 ```go
 package main
@@ -229,7 +227,7 @@ This program can be described by following tree of DWARF DIEs.
 
 ![debug_info example](assets/debug_info_example.jpeg)
 
-#### 2.2.3.3 debug_frame example
+### 3.3.3 debug_frame example
 
 ```
 2 0x00000000004519c9 in main.f at ./panicy.go:4
@@ -285,12 +283,12 @@ To create a stack trace:
     - SP{i+1} = SP{i}+sz{i}
 - the stack trace is PC{0}, PC{1}, PC{2}...
 
-#### 2.2.3.4 Symbolic Layer in Delve
+### 3.3.4 Symbolic Layer in Delve
 
 - mostly pkg/proc
 - support code in pkg/dwarf and stdlib debug/dwarf
 
-### 2.2.4 Actual Architecture of Delve
+## 3.4 Actual Architecture of Delve
 
 We Mentioned before, delve's architecture includes:
 - UI Layer
@@ -299,7 +297,7 @@ We Mentioned before, delve's architecture includes:
 
 Well, this is a lie.
 
-#### 2.2.4.1 Actual Architecture
+### 3.4.1 Actual Architecture
 
 If we want delve to be embeded into other programs easier, service oriented APIs should be provided.
 
@@ -307,7 +305,7 @@ If we want delve to be embeded into other programs easier, service oriented APIs
 
 This architecture and design makes embedding delve into other programs easier, so you can integrate delve with GoLand, VSCode, Atom, Vim, etc.
 
-#### 2.2.4.2 User Interfaces
+### 3.4.2 User Interfaces
 
 - Built-in command line prompt Plugins
     - Atom plugin, https://github.com/lloiser/go-debug 
@@ -324,7 +322,5 @@ Delve's actual architecture and associated core packages is as following:
 
 ![delve_actual_architecture](assets/delve_architecture_core.jpeg)    
 
-## 2.3 Implemention of some delve features
-
-# 3 Reference
+# 4 Reference
 1. [Architecture of Delve slides](https://speakerdeck.com/aarzilli/internal-architecture-of-delve).
