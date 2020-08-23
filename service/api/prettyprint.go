@@ -444,10 +444,12 @@ func byteArrayToUInt(arr []byte) interface{} {
 	return v
 }
 
-func reverse(s interface{}) {
-	n := reflect.ValueOf(s).Len()
-	swap := reflect.Swapper(s)
+func reverse(buf []byte) {
+	n := len(buf)
+	if n <= 1 {
+		return
+	}
 	for i, j := 0, n-1; i < j; i, j = i+1, j-1 {
-		swap(i, j)
+		buf[i], buf[j] = buf[j], buf[i]
 	}
 }

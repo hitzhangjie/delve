@@ -37,8 +37,8 @@ func TestPrettyExamineMemory(t *testing.T) {
 func Test_reverse(t *testing.T) {
 	tests := []struct {
 		name string
-		args interface{}
-		want interface{}
+		args []byte
+		want []byte
 	}{
 		{"case-1-byte", []byte{1}, []byte{1}},
 		{"case-2-bytes", []byte{1, 2}, []byte{2, 1}},
