@@ -18,7 +18,7 @@ This document will give a general overview of delve's architecture, and explain 
   
 ## 2.2 Call Stack
 
-Normally, each function call has a isolated call stack frame, where stores the arguments, local variables and  return address of a function call.
+Normally, each function call has an isolated call stack frame, where stores the arguments, local variables and  return address of a function call.
 
 Following is an illustration:
 
@@ -109,9 +109,9 @@ Well, when calling a function, pushing the arguments, pushing the return address
 
 |                |                   |
 |:--------------:|:------------------|
-| UI Layer       | the debugging user interface, like: <br>- command line interface<br>- graphical user interface like GoLand or VSCode Go.
-| Symbolic Layer | knows about:<br> - line numbers, .debug_line<br>- types, .debug_types<br>- variable names, .debug_info, etc.
-| Target Layer   | controls target process, doesn't know anything about your source code, like<br>- set breakpoint<br>- execute next statement<br>- step into a function<br>- step out a function<br>- etc.
+| UI Layer       | the debugging user interface, like: <br>- command line interface<br>- graphical user interface like GoLand or VSCode
+| Symbolic Layer | knows about:<br> - line numbers, .debug_line<br>- types, .debug_types<br>- variable names, .debug_info, etc
+| Target Layer   | controls target process, doesn't know anything about your source code, like<br>- set breakpoint<br>- execute next statement<br>- step into a function<br>- step out a function<br>- etc
 
 ## 3.2 Features of the Target Layer
 
@@ -251,13 +251,13 @@ at /usr/local/go/src/runtime/asm_amd64.s:2361
 |                              | <- SP              |
 
 
-- if functions had noo local variables of arguments this would be easy
+- if functions had no local variables of arguments this would be easy
 - a stack trace is the value of PC register
 - followed by reading the stack starting at SP
 
 Section .debug_frame can be used for creating a CFI (Call Frame Information) table, which can give you the size of the current stack frame given the address of an instruction
 
-Actually has many more features, but that's the only thing youo need for pure Go.
+Actually has many more features, but that's the only thing you need for pure Go.
 
 |||
 |:-------------------------:|:------------------:|
@@ -274,7 +274,7 @@ Actually has many more features, but that's the only thing youo need for pure Go
 To create a stack trace:
 - start with:
     - PC{0} = the value of the PC register
-    - SP{0} = the value fo the SP register
+    - SP{0} = the value of the SP register
 - lookup PC{i} in .debug_frame:
     - get size of the current frame sz{i}
 - get return address ret{i} at `SP{i}+sz{i}-8`

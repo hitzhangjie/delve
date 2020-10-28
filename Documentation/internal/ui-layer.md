@@ -9,7 +9,7 @@ When a terminal initialized, the common debug operations, like help, backtrace, 
 `terminal/command.go`:
 - help [cmd], if cmd is specified, it will print the help message of `cmd`, otherwhile, it will print each command's help message.
 - break [name] <locspec>, terminal wraps an debug service client, firstly, the client will query the locations specified by the locspec, secondly, the client will request to add breakpoints for the locations.
-- trace [name] <linespec>, trace works similarly to break, the difference is trace gives us an ability to watch the event when the tracepoint is hit, but doesn't stop the execution of tracee..
+- trace [name] <linespec>, trace works similarly to break, the difference is trace gives us an ability to watch the event when the tracepoint is hit, but doesn't stop the execution of tracee.
 - restart, restart the debug operation, if recording enabled, you can restart from specified position.
 - continue, keep running util breakpoint is hit, well, delve may trace all threads of debugged process. fixme! if i am wrong!
 - step, step execution one statement, firstly, we must select the right goroutine to single step, well, get the current thread, and read the memory at `thread.TLS+struct field G offset` to read the goroutine id, and select this goroutine and thread to step.
