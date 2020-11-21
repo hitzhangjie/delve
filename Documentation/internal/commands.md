@@ -13,7 +13,9 @@ when `dlv` executed, it will do following actions:
   `children commands`, including their full, inherited, private flagset.
 - then `(*cobra.Command).Execute()`, to prompt user input and process.
 
-`dlv` provides supports following operations:
+`dlv` provides supports following operations, they're defined in file `cmd/dlv/cmds/commands.go:New()`:
 - attach, 
 - connect, connect to debug service, initialize terminal to prompt input to debug.
 - 
+
+
