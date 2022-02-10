@@ -1487,10 +1487,39 @@ func (d *Debugger) Type(name string) (string, error) {
 	buf := &bytes.Buffer{}
 	switch v := typ.(type) {
 	case *godwarf.StructType:
+		// print struct name
 		fmt.Fprintf(buf, "struct %s\n", v.StructName)
+		// print field name and type
 		fmt.Fprintf(buf, "fields\n")
 		for i, f := range v.Field {
 			fmt.Fprintf(buf, "\t%d %s %s\n", i, f.Name, f.Type.String())
+		}
+
+		// print method name and parameter list
+		vals := strings.Split(v.StructName, ".")
+		rcvType := fmt.Sprintf("%s.(*%s)", vals[0], vals[1])
+
+		find := func(rcvType string) ([]proc.Function, error) {
+			funcs := []proc.Function{}
+			for _, fn := range d.Target().BinInfo().Functions {
+				if strings.HasPrefix(fn.Name, rcvType) {
+					funcs = append(funcs, fn)
+				}
+			}
+			return funcs, nil
+		}
+
+		funcs, err := find(rcvType)
+		if err != nil {
+			fmt.Println(err)
+			break
+		}
+		if len(funcs) == 0 {
+			break
+		}
+		fmt.Fprintf(buf, "method\n")
+		for _, fn := range funcs {
+			fmt.Fprintf(buf, "\t%s\n", fn.BaseName())
 		}
 	}
 
