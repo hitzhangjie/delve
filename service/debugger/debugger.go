@@ -19,6 +19,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 
+	"github.com/go-delve/delve/pkg/dwarf/godwarf"
 	"github.com/go-delve/delve/pkg/dwarf/op"
 	"github.com/go-delve/delve/pkg/gobuild"
 	"github.com/go-delve/delve/pkg/goversion"
@@ -1483,7 +1484,17 @@ func (d *Debugger) Type(name string) (string, error) {
 		return "", err
 	}
 
-	return typ.String(), nil
+	buf := &bytes.Buffer{}
+	switch v := typ.(type) {
+	case *godwarf.StructType:
+		fmt.Fprintf(buf, "struct %s\n", v.StructName)
+		fmt.Fprintf(buf, "fields\n")
+		for i, f := range v.Field {
+			fmt.Fprintf(buf, "\t%d %s %s\n", i, f.Name, f.Type.String())
+		}
+	}
+
+	return buf.String(), nil
 }
 
 // PackageVariables returns a list of package variables for the thread,
