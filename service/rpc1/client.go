@@ -6,7 +6,6 @@ import (
 	"log"
 	"net/rpc"
 	"net/rpc/jsonrpc"
-
 	"sync"
 
 	"github.com/go-delve/delve/service/api"
@@ -245,6 +244,12 @@ func (c *RPCClient) ListTypes(filter string) ([]string, error) {
 	var types []string
 	err := c.call("ListTypes", filter, &types)
 	return types, err
+}
+
+func (c *RPCClient) GetType(typeName string) (string, error) {
+	var info string
+	err := c.call("GetType", typeName, &info)
+	return info, err
 }
 
 func (c *RPCClient) ListPackageVariables(filter string) ([]api.Variable, error) {

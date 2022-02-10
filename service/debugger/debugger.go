@@ -17,6 +17,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/sirupsen/logrus"
+
 	"github.com/go-delve/delve/pkg/dwarf/op"
 	"github.com/go-delve/delve/pkg/gobuild"
 	"github.com/go-delve/delve/pkg/goversion"
@@ -27,7 +29,6 @@ import (
 	"github.com/go-delve/delve/pkg/proc/gdbserial"
 	"github.com/go-delve/delve/pkg/proc/native"
 	"github.com/go-delve/delve/service/api"
-	"github.com/sirupsen/logrus"
 )
 
 var (
@@ -1471,6 +1472,18 @@ func (d *Debugger) Types(filter string) ([]string, error) {
 	}
 
 	return r, nil
+}
+
+func (d *Debugger) Type(name string) (string, error) {
+	d.targetMutex.Lock()
+	defer d.targetMutex.Unlock()
+
+	typ, err := d.target.BinInfo().Type(name)
+	if err != nil {
+		return "", err
+	}
+
+	return typ.String(), nil
 }
 
 // PackageVariables returns a list of package variables for the thread,

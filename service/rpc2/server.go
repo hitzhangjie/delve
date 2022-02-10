@@ -607,6 +607,23 @@ func (s *RPCServer) ListTypes(arg ListTypesIn, out *ListTypesOut) error {
 	return nil
 }
 
+type GetTypeIn struct {
+	TypeName string
+}
+
+type GetTypeOut struct {
+	TypeInfo string
+}
+
+func (s *RPCServer) GetType(arg GetTypeIn, out *GetTypeOut) error {
+	inf, err := s.debugger.Type(arg.TypeName)
+	if err != nil {
+		return err
+	}
+	out.TypeInfo = inf
+	return nil
+}
+
 type ListGoroutinesIn struct {
 	Start int
 	Count int

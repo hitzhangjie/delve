@@ -342,6 +342,12 @@ func (c *RPCClient) ListTypes(filter string) ([]string, error) {
 	return types.Types, err
 }
 
+func (c *RPCClient) GetType(typeName string) (string, error) {
+	info := new(GetTypeOut)
+	err := c.call("GetType", GetTypeIn{typeName}, &info)
+	return info.TypeInfo, err
+}
+
 func (c *RPCClient) ListPackageVariables(filter string, cfg api.LoadConfig) ([]api.Variable, error) {
 	var out ListPackageVarsOut
 	err := c.call("ListPackageVars", ListPackageVarsIn{filter, cfg}, &out)

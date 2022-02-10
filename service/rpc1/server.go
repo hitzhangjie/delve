@@ -281,6 +281,15 @@ func (s *RPCServer) ListTypes(filter string, types *[]string) error {
 	return nil
 }
 
+func (s *RPCServer) GetType(typeName string, typeInf *string) error {
+	inf, err := s.debugger.Type(typeName)
+	if err != nil {
+		return err
+	}
+	*typeInf = inf
+	return nil
+}
+
 func (s *RPCServer) ListGoroutines(arg interface{}, goroutines *[]*api.Goroutine) error {
 	gs, _, err := s.debugger.Goroutines(0, 0)
 	if err != nil {

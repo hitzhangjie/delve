@@ -21,6 +21,9 @@ import (
 	"sync"
 	"time"
 
+	"github.com/hashicorp/golang-lru/simplelru"
+	"github.com/sirupsen/logrus"
+
 	"github.com/go-delve/delve/pkg/dwarf/frame"
 	"github.com/go-delve/delve/pkg/dwarf/godwarf"
 	"github.com/go-delve/delve/pkg/dwarf/line"
@@ -31,8 +34,6 @@ import (
 	"github.com/go-delve/delve/pkg/goversion"
 	"github.com/go-delve/delve/pkg/logflags"
 	"github.com/go-delve/delve/pkg/proc/debuginfod"
-	"github.com/hashicorp/golang-lru/simplelru"
-	"github.com/sirupsen/logrus"
 )
 
 const (
@@ -700,6 +701,10 @@ func (bi *BinaryInfo) Types() ([]string, error) {
 		types = append(types, k)
 	}
 	return types, nil
+}
+
+func (bi *BinaryInfo) Type(name string) (godwarf.Type, error) {
+	return bi.findType(name)
 }
 
 // PCToLine converts an instruction address to a file/line/function.

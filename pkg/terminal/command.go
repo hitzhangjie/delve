@@ -26,6 +26,7 @@ import (
 	"time"
 
 	"github.com/cosiner/argv"
+
 	"github.com/go-delve/delve/pkg/config"
 	"github.com/go-delve/delve/pkg/locspec"
 	"github.com/go-delve/delve/pkg/proc/debuginfod"
@@ -326,6 +327,11 @@ If regex is specified only the functions matching it will be returned.`},
 	types [<regex>]
 
 If regex is specified only the types matching it will be returned.`},
+		{aliases: []string{"ptype"}, cmdFn: ptype, helpMsg: `Print type definition
+	ptype <type>
+
+You may run types <regex> to determine the qualified typename.
+`},
 		{aliases: []string{"args"}, allowedPrefixes: onPrefix | deferredPrefix, group: dataCmds, cmdFn: args, helpMsg: `Print function arguments.
 
 	[goroutine <n>] [frame <m>] args [-v] [<regex>]
@@ -2088,6 +2094,11 @@ func funcs(t *Term, ctx callContext, args string) error {
 
 func types(t *Term, ctx callContext, args string) error {
 	return t.printSortedStrings(t.client.ListTypes(args))
+}
+
+func ptype(t *Term, ctx callContext, args string) error {
+	fmt.Println(t.client.GetType(args))
+	return nil
 }
 
 func parseVarArguments(args string, t *Term) (filter string, cfg api.LoadConfig) {
