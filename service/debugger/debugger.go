@@ -1517,9 +1517,9 @@ func (d *Debugger) Type(name string) (string, error) {
 		if len(funcs) == 0 {
 			break
 		}
-		fmt.Fprintf(buf, "method\n")
+		fmt.Fprintf(buf, "methods\n")
 		for _, fn := range funcs {
-			fmt.Fprintf(buf, "\t%s\n", fn.BaseName())
+			fmt.Fprintf(buf, "\tfunc %s(%s) (%s)\n", fn.BaseName(), strings.Join(fn.Params, ","), strings.Join(fn.RetParams, ","))
 		}
 	}
 

@@ -482,6 +482,9 @@ type Function struct {
 
 	// InlinedCalls lists all inlined calls to this function
 	InlinedCalls []InlinedCall
+
+	Params    []string
+	RetParams []string
 }
 
 // instRange returns the indexes in fn.Name of the type parameter
@@ -703,6 +706,7 @@ func (bi *BinaryInfo) Types() ([]string, error) {
 	return types, nil
 }
 
+// Type return type info in the debugged program.
 func (bi *BinaryInfo) Type(name string) (godwarf.Type, error) {
 	return bi.findType(name)
 }
@@ -2180,6 +2184,8 @@ func (bi *BinaryInfo) addConcreteSubprogram(entry *dwarf.Entry, ctxt *loadDebugI
 	fn.trampoline = trampoline
 
 	if entry.Children {
+		bi.loadFunctionParameters(entry, fn, ctxt, reader, cu)
+		reader.SeekToEntry(entry)
 		bi.loadDebugInfoMapsInlinedCalls(ctxt, reader, cu)
 	}
 }
@@ -2203,6 +2209,48 @@ func subprogramEntryRange(entry *dwarf.Entry, image *Image) (lowpc, highpc uint6
 		highpc = ranges[0][1] + image.StaticBase
 	}
 	return lowpc, highpc, ok
+}
+
+func (bi *BinaryInfo) loadFunctionParameters(fnEntry *dwarf.Entry, fn *Function, ctxt *loadDebugInfoMapsContext, reader *reader.Reader, cu *compileUnit) {
+	//spew.Dump(fnEntry)
+	var skip bool = true
+	for {
+		entry, err := reader.Next()
+		if err != nil {
+			return
+		}
+		if entry == nil {
+			return
+		}
+		switch entry.Tag {
+		case dwarf.TagFormalParameter:
+			if fn.ReceiverName() != "" && skip {
+				skip = false
+				continue
+			}
+			isRetParameter, ok := entry.Val(dwarf.AttrVarParam).(bool)
+			if !ok {
+				panic("should be variable_parameter:true/false")
+			}
+
+			nentry, err := reader.SeekToType(entry, false, false)
+			if err != nil {
+				panic(err)
+			}
+			typeName := nentry.Val(dwarf.AttrName).(string)
+			paramName := entry.Val(dwarf.AttrName).(string) + " " + typeName
+
+			if !isRetParameter {
+				fn.Params = append(fn.Params, paramName)
+			} else {
+				fn.RetParams = append(fn.RetParams, paramName)
+			}
+			//fmt.Println("add parameters for fn:", fn.Name, fn.Params, fn.RetParams)
+			reader.SeekToEntry(entry)
+		default:
+			return
+		}
+	}
 }
 
 func (bi *BinaryInfo) loadDebugInfoMapsInlinedCalls(ctxt *loadDebugInfoMapsContext, reader *reader.Reader, cu *compileUnit) {
