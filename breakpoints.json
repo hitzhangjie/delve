@@ -1,0 +1,19 @@
+{
+    "breakpoints": [
+        {
+            "function": "RPCServer.AmendBreakpoint",
+            "condition": "",
+            "hitCondition": ""
+        },
+        {
+            "function": "RPCServer.Ancestors",
+            "condition": "",
+            "hitCondition": ""
+        },
+        {
+            "function": "RPCServer.AttachedToExistingProcess",
+            "condition": "",
+            "hitCondition": ""
+        }
+    ]
+}
