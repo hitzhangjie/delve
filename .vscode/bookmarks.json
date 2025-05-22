@@ -1,0 +1,224 @@
+{
+	"files": [
+		{
+			"path": "cmd/dlv/main.go",
+			"bookmarks": [
+				{
+					"line": 14,
+					"column": 12,
+					"label": "entrypoint"
+				}
+			]
+		},
+		{
+			"path": "cmd/dlv/cmds/commands.go",
+			"bookmarks": [
+				{
+					"line": 135,
+					"column": 0,
+					"label": "dlv commands"
+				},
+				{
+					"line": 1031,
+					"column": 32,
+					"label": "dlv execute"
+				},
+				{
+					"line": 1095,
+					"column": 0,
+					"label": "dlv execute: 1) listen tcp/unix in headless mode 2) use pipe in non-headless mode"
+				},
+				{
+					"line": 1148,
+					"column": 18,
+					"label": "dlv execute: dlv backend runs (native/lldb/gdb/rr)"
+				}
+			]
+		},
+		{
+			"path": "service/debugger/debugger.go",
+			"bookmarks": [
+				{
+					"line": 283,
+					"column": 0,
+					"label": "dlv execute: launchFlags including DisableALSR flag"
+				}
+			]
+		},
+		{
+			"path": "service/rpccommon/server.go",
+			"bookmarks": [
+				{
+					"line": 118,
+					"column": 33,
+					"label": "dlv execute: create the debugger"
+				},
+				{
+					"line": 122,
+					"column": 22,
+					"label": "dlv execute: create the rpcserver and dispatch requests to debugger"
+				},
+				{
+					"line": 130,
+					"column": 10,
+					"label": "dlv execute: register supported V2 RPC methods"
+				},
+				{
+					"line": 131,
+					"column": 12,
+					"label": "rpcserver: supported common methods"
+				},
+				{
+					"line": 176,
+					"column": 18,
+					"label": "rpcserver: codec supports DAP or JSON"
+				},
+				{
+					"line": 194,
+					"column": 26,
+					"label": "rpcserver: RPC is asynchronous mode if ReplyType==service.RPCCallback"
+				},
+				{
+					"line": 261,
+					"column": 30,
+					"label": "rpcserver: execute RPC method"
+				},
+				{
+					"line": 320,
+					"column": 28,
+					"label": "rpcserver: some commands return resp asynchronously"
+				}
+			]
+		},
+		{
+			"path": "service/rpccommon/suitablemethods.go",
+			"bookmarks": [
+				{
+					"line": 9,
+					"column": 10,
+					"label": "rpcserver: supported v2 RPC methods"
+				}
+			]
+		},
+		{
+			"path": "pkg/proc/eval.go",
+			"bookmarks": [
+				{
+					"line": 135,
+					"column": 0,
+					"label": "scope"
+				},
+				{
+					"line": 196,
+					"column": 27,
+					"label": "eval: eval expression"
+				},
+				{
+					"line": 1044,
+					"column": 0,
+					"label": "eval: evalstack execute ops compiled from parsed AST"
+				},
+				{
+					"line": 1112,
+					"column": 15,
+					"label": "eval: s.Name, put variable of `s` onto the stack"
+				},
+				{
+					"line": 1117,
+					"column": 21,
+					"label": "eval: push variable of s.Name onto the stack"
+				}
+			]
+		},
+		{
+			"path": "pkg/proc/variables.go",
+			"bookmarks": [
+				{
+					"line": 100,
+					"column": 9,
+					"label": "variable: !!!"
+				},
+				{
+					"line": 255,
+					"column": 5,
+					"label": "golang: read thread local storage to get the *g"
+				},
+				{
+					"line": 697,
+					"column": 0,
+					"label": "variable: read variable value from memory"
+				}
+			]
+		},
+		{
+			"path": "pkg/proc/stack.go",
+			"bookmarks": [
+				{
+					"line": 226,
+					"column": 37,
+					"label": "bt: use stackIterator to get the callstack"
+				},
+				{
+					"line": 290,
+					"column": 6,
+					"label": "bt: unwind the stack, it.pc = it.frame.ret, it.regs = allframeregs"
+				}
+			]
+		},
+		{
+			"path": "pkg/dwarf/frame/entries.go",
+			"bookmarks": [
+				{
+					"line": 57,
+					"column": 37,
+					"label": "fde: establish frame"
+				}
+			]
+		},
+		{
+			"path": "pkg/proc/amd64_arch.go",
+			"bookmarks": [
+				{
+					"line": 135,
+					"column": 0,
+					"label": "switchstack"
+				},
+				{
+					"line": 266,
+					"column": 0,
+					"label": "dwarf registers: amd64"
+				}
+			]
+		},
+		{
+			"path": "pkg/dwarf/regnum/amd64.go",
+			"bookmarks": [
+				{
+					"line": 128,
+					"column": 15,
+					"label": "dwarf registers"
+				}
+			]
+		},
+		{
+			"path": "pkg/dwarf/frame/table.go",
+			"bookmarks": [
+				{
+					"line": 115,
+					"column": 4,
+					"label": "fde: instruction opcode and function implemention"
+				},
+				{
+					"line": 164,
+					"column": 17,
+					"label": "fde: exceute CIE, FDE instructions"
+				},
+				{
+					"line": 181,
+					"column": 33,
+					"label": "fde: execute instructions in FDE to virtually unwind"
+				}
+			]
+		}
+	]
+}
