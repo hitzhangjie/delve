@@ -219,6 +219,26 @@
 					"label": "fde: execute instructions in FDE to virtually unwind"
 				}
 			]
+		},
+		{
+			"path": "_scripts/make.go",
+			"bookmarks": [
+				{
+					"line": 333,
+					"column": 0,
+					"label": "version: set the version number when linker runs"
+				}
+			]
+		},
+		{
+			"path": "cmd/dlv/cmds/helphelpers/help.go",
+			"bookmarks": [
+				{
+					"line": 24,
+					"column": 33,
+					"label": "commands: hide subcommand flags (they add too many flags on rootCommand which isn't good)"
+				}
+			]
 		}
 	]
 }
