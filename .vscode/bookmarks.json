@@ -239,6 +239,16 @@
 					"label": "commands: hide subcommand flags (they add too many flags on rootCommand which isn't good)"
 				}
 			]
+		},
+		{
+			"path": "service/internal/sameuser/sameuser_linux.go",
+			"bookmarks": [
+				{
+					"line": 109,
+					"column": 10,
+					"label": "server: when debugging local process, check if users of dlv client and server is same or not"
+				}
+			]
 		}
 	]
 }
