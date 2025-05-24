@@ -249,6 +249,16 @@
 					"label": "server: when debugging local process, check if users of dlv client and server is same or not"
 				}
 			]
+		},
+		{
+			"path": "pkg/proc/target_group.go",
+			"bookmarks": [
+				{
+					"line": 19,
+					"column": 24,
+					"label": "multiprocess debugging"
+				}
+			]
 		}
 	]
 }
